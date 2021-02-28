@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS coche;
+CREATE TABLE coche (
+  id INT AUTO_INCREMENT NOT NULL,
+  matricula VARCHAR(7) NOT NULL,
+  marca VARCHAR(250) NOT NULL,
+  modelo VARCHAR(250) NOT NULL,
+  CONSTRAINT pk_coches PRIMARY KEY (id, matricula)
+);
