@@ -13,6 +13,6 @@ spring:
       path: /h2
       enabled: true
   flyway:
-    enabled: true
-    baselineOnMigrate: true
-    validate-on-migrate: true
+    enabled: false
+    baselineOnMigrate: false
+    validate-on-migrate: false

@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.tutorial.coches.dto.CochesDto;
 import com.tutorial.coches.repository.entity.CochesEntity;
+import com.tutorial.coches.repository.entity.pk.CochesPkEntity;
 import com.tutorial.coches.repository.jdbc.CochesRepository;
 import com.tutorial.coches.service.CochesService;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -20,6 +23,7 @@ import com.tutorial.coches.service.CochesService;
  *
  */
 @Service
+@Slf4j
 public class CochesServiceImpl implements CochesService{
 
 	
@@ -48,8 +52,12 @@ public class CochesServiceImpl implements CochesService{
 	
 	@Override
 	public List<CochesDto> getCochesByMarca(String marca) {
-		List<CochesEntity> listCars = cochesRepository.findByMarca(marca);
-		List<CochesDto> output = mapEntityToDTO(listCars);
+		List<CochesEntity> listCars = new ArrayList<>();
+		listCars.addAll(cochesRepository.findByMarca(marca));	
+		List<CochesDto> output = new ArrayList<>();
+		if (!listCars.isEmpty()) {
+			output = mapEntityToDTO(listCars);	
+		}		
 		return output;
 	}
 
@@ -65,6 +73,24 @@ public class CochesServiceImpl implements CochesService{
 			output.add(resp);
 		}
 		return output;
+	}
+
+	@Override
+	public Boolean deleteCocheByClave(String matricula) {
+		log.info("#### Se va a borrar el coche: {} ####", matricula);
+		CochesEntity cocheEnTable = cochesRepository.findByPk_Matricula(matricula);
+		Integer result = 0;
+		if (cocheEnTable != null) {
+			result = cochesRepository.deleteByPk_Matricula(matricula);
+			/*
+			 * CochesPkEntity coche = new CochesPkEntity();
+			 * coche.setId(cocheEnTable.getPk().getId());
+			 * coche.setMatricula(cocheEnTable.getPk().getMatricula());
+			 * cochesRepository.deleteById(coche);
+			 */
+		}
+		log.info("#### Se ha borrado coche: {} ####", matricula);
+		return (result>0)?true:false;
 	}
 
 }

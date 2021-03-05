@@ -6,6 +6,8 @@ package com.tutorial.coches.repository.jdbc;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tutorial.coches.repository.entity.CochesEntity;
 import com.tutorial.coches.repository.entity.pk.CochesPkEntity;
@@ -20,4 +22,12 @@ public interface CochesRepository extends JpaRepository<CochesEntity, CochesPkEn
 	
 	List<CochesEntity> findByMarca(String marca);
 	
+	CochesEntity findByPk_Matricula(String matricula);
+	
+	@Modifying
+	@Transactional
+	Integer deleteByPk_Matricula(String matricula);
+	
+	
+		
 }
