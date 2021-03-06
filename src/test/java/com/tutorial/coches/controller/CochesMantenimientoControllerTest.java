@@ -33,10 +33,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootTest
-class CochesControllerTest {
+class CochesMantenimientoControllerTest {
 
 	@InjectMocks
-	CochesController cochesController;
+	CochesMantenimientoController cochesMantenimientoController;
 	
 	@Mock
 	CochesService cochesService;
@@ -55,45 +55,22 @@ class CochesControllerTest {
 	  Mockito.when(cochesService.deleteCocheByClave("1234ZZZ")).thenReturn(false);
 	  }
 	 
-	
 	@Test
-	void getAllMock() {
-		log.info("###### Running getAllMockTest #####");
-		try {
-		ResponseEntity<?> responseList = cochesController.getAllMock();
-		assertNotNull(responseList);
-		} catch (Throwable e) {
-			fail();
-		}
-		log.info("###### Return getAllMockTest #####");
+	void deleteByMarca_OK() {
+		log.info("###### Running deleteByMarca #####");
+		ResponseEntity<?> responseList = cochesMantenimientoController.deleteByMarca("4321ZZZ");
+		assertTrue(responseList.getBody().equals(true));
+		log.info("###### Return deleteByMarca #####");
 	}
 	
 	@Test
-	void getAll() {
-		log.info("###### Running getAllTest #####");
-		ResponseEntity<?> responseList = cochesController.getAll();
-		assertNotNull(responseList);
-		log.info("###### Return getAllTest #####");
+	void deleteByMarca_KO() {
+		log.info("###### Running deleteByMarca #####");
+		ResponseEntity<?> responseList = cochesMantenimientoController.deleteByMarca("1234ZZZ");
+		assertTrue(responseList.getBody().equals(false));
+		log.info("###### Return deleteByMarca #####");
 	}
 	
-	@Test
-	void getAllByMarca_TestOk() {
-		log.info("###### Running getAllTest #####");
-		ResponseEntity<?> responseList = cochesController.getAllByMarca("Opel");
-		assertNotNull(responseList);
-		assertEquals(responseList.getStatusCode(), HttpStatus.OK);
-		log.info("###### Return getAllTest #####");
-	}
-	
-	@Test
-	void getAllByMarca_TestKo() {
-		log.info("###### Running getAllTest #####");
-		ResponseEntity<?> responseList = cochesController.getAllByMarca("Ford");
-		assertNotNull(responseList);
-		assertThat(responseList.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-		log.info("###### Return getAllTest #####");
-	}
-			
 	List<CochesDto> MockDtoCoches() {
 		CochesDto resp = new CochesDto();
 		resp.setId(1);
