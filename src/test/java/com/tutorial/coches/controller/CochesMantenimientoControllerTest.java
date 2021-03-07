@@ -3,11 +3,7 @@
  */
 package com.tutorial.coches.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.tutorial.coches.dto.CochesDto;
+import com.tutorial.coches.dto.ResponseDto;
 import com.tutorial.coches.service.CochesService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +45,11 @@ class CochesMantenimientoControllerTest {
 	  log.info("###### TEST CONTROLLER SetUp #####"); 
 	  cochesDto = new ArrayList<CochesDto>();
 	  cochesDto = MockDtoCoches();
-      Mockito.when(cochesService.getAllCoches()).thenReturn(cochesDto);
-	  Mockito.when(cochesService.getAllCochesMock()).thenReturn(cochesDto);
-	  Mockito.when(cochesService.getCochesByMarca("Opel")).thenReturn(cochesDto);
+	  ResponseDto responseResult = new ResponseDto(HttpStatus.ACCEPTED, "", false);
 	  Mockito.when(cochesService.deleteCocheByClave("4321ZZZ")).thenReturn(true);
 	  Mockito.when(cochesService.deleteCocheByClave("1234ZZZ")).thenReturn(false);
+	  Mockito.when(cochesService.addNewCar(Mockito.any(CochesDto.class))).thenReturn(responseResult);	  
+	  Mockito.when(cochesService.modifyCar(Mockito.any(CochesDto.class))).thenReturn(responseResult);	  
 	  }
 	 
 	@Test
@@ -69,6 +66,20 @@ class CochesMantenimientoControllerTest {
 		ResponseEntity<?> responseList = cochesMantenimientoController.deleteByMarca("1234ZZZ");
 		assertTrue(responseList.getBody().equals(false));
 		log.info("###### Return deleteByMarca #####");
+	}
+	
+	@Test
+	void addNewCoche() {
+		CochesDto newCar = new CochesDto();
+		ResponseEntity<?> responseList = cochesMantenimientoController.addNewCoche(newCar);
+		assertTrue(responseList.getStatusCode().equals(HttpStatus.ACCEPTED));
+	}
+	
+	@Test
+	void modifyCoche() {
+		CochesDto newCar = new CochesDto();
+		ResponseEntity<?> responseList = cochesMantenimientoController.modifyCoche(newCar);
+		assertTrue(responseList.getStatusCode().equals(HttpStatus.ACCEPTED));
 	}
 	
 	List<CochesDto> MockDtoCoches() {

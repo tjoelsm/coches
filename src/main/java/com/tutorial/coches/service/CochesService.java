@@ -16,5 +16,7 @@ public interface CochesService {
 	Boolean deleteCocheByClave(String matricula);
 	
 	ResponseDto addNewCar(CochesDto coche);
+	
+	ResponseDto modifyCar(CochesDto coche);
 
 }

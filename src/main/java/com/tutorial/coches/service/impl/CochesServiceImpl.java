@@ -137,11 +137,28 @@ public class CochesServiceImpl implements CochesService{
 		List<CochesEntity> output = new ArrayList<>();
 			CochesEntity resp = new CochesEntity();
 			CochesPkEntity pk = new CochesPkEntity();
+			if (entrada.getId()==null || !entrada.getId().equals(0)) {
+				pk.setId(entrada.getId());
+			}
 			pk.setMatricula(entrada.getMatricula());
 			resp.setPk(pk);
 			resp.setMarca(entrada.getMarca());
 			resp.setModelo(entrada.getModelo());
 			output.add(resp);
 			return output;
+	}
+
+	@Override
+	public ResponseDto modifyCar(CochesDto coche) {
+		
+		ResponseDto resultNewCoche = new ResponseDto(HttpStatus.ACCEPTED, Constants.SUCCESO, false);
+		try {
+			cochesRepository.saveAll(mapDtoToEntity(coche));
+			return resultNewCoche;
+		} catch (Exception e) {
+			resultNewCoche.setCod(HttpStatus.INTERNAL_SERVER_ERROR);
+			resultNewCoche.setMensaje(e.getMessage());
+			return resultNewCoche;
+		}
 	}
 }
